@@ -68,6 +68,22 @@ RSpec.describe ProjectsController, type: :controller do
       end
     end
 
+    context "for a subproject" do
+      let(:sub_project_valid_params) { attributes_for(:project, parent_id: project.id) }
+
+      it "creates a new sub project" do
+        expect {
+          post :create, params: {project: sub_project_valid_params}
+        }.to change(Project, :count).by(1)
+      end
+
+      it "redirects to the parent project" do
+        post :create, params: {project: sub_project_valid_params}
+
+        expect(response).to redirect_to "/projects/#{project.id}"
+      end
+    end
+
     context "with invalid attributes" do
       let(:invalid_attributes) { {title: ""} }
 

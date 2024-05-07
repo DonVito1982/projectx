@@ -28,10 +28,10 @@ class ProjectsController < ApplicationController
   end
 
   def create
-    @project = Project.new(projects_params)
+    @project = Project.new(project_params)
     if @project.save
       flash[:success] = "Project created!"
-      redirect_to project_path(@project.id)
+      redirect_to project_path(@project.parent_id || @project.id)
     else
       flash.now[:error] = @project.errors.full_messages
       render :new
@@ -52,7 +52,7 @@ class ProjectsController < ApplicationController
   end
 
   def update
-    if @project.update(projects_params)
+    if @project.update(project_params)
       respond_to do |format|
         format.html do
           flash[:success] = "Project updated!"
@@ -78,7 +78,7 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id] || params[:project_id])
   end
 
-  def projects_params
+  def project_params
     params.require(:project).permit(:title, :status, :parent_id)
   end
 end
