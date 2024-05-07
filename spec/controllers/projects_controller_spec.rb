@@ -62,8 +62,9 @@ RSpec.describe ProjectsController, type: :controller do
 
       it "redirects to the new project" do
         post :create, params: {project: valid_params}
+        created_project = Project.last
 
-        expect(response).to redirect_to "/projects"
+        expect(response).to redirect_to "/projects/#{created_project.id}"
       end
     end
 
